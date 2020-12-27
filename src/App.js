@@ -4,9 +4,9 @@ import './App.css'
 function App() {
   //Set up the Todo List
   const [toDoList, setToDoList] = useState([
-    { text: 'study coding' },
-    { text: 'exercise' },
-    { text: 'stress less' }
+    { text: 'study coding', isCompleted: false },
+    { text: 'exercise', isCompleted: false },
+    { text: 'stress less', isCompleted: false }
   ])
 
   //set up our input value
@@ -30,6 +30,14 @@ function App() {
     let filteredToDoList = toDoList.filter(currentToDo => currentToDo !== todo)
     setToDoList(filteredToDoList)
   }
+  //Completed To-Do
+  const completeTodo = index => {
+    const newTodos = [...toDoList]
+    newTodos[index].isCompleted = true
+    setToDoList(newTodos)
+  }
+
+  //using If statement to create a lineThrough
 
   return (
     <div className="min-h-screen flex flex-col flex-shrink-0 bg-gray-100">
@@ -42,24 +50,13 @@ function App() {
           onSubmit={handleSubmit}
           className="form flex mt-4 mb-4 justify-between"
         >
-          {/* <TextField
-            id="outlined-basic"
-            label="To Do"
-            variant="outlined"
-            value={value}
-            onChange={e => setValue(e.target.value)}
-          /> */}
-          {/* <Fab size="small" color="primary" aira-label="add" type="submit">
-            <AddIcon />
-          </Fab> */}
-
           <label htmlFor="todo" className="block md:w-2/3 md:mr-1">
             <input
               type="text"
               name="todo"
               value={value}
               onChange={e => setValue(e.target.value)}
-              className="block w-full rounded-md border-gray-100 shadow-sx focus:border-red-300 focus:ring focus:ring-red-400 focus:ring-opacity-30"
+              className="text-center block w-full rounded-md border-gray-100 shadow-sx focus:border-red-300 focus:ring focus:ring-red-400 focus:ring-opacity-30"
               placeholder="Add a new Todo!"
               autoFocus
             />
@@ -75,38 +72,52 @@ function App() {
 
         <div className="toDoList h-full">
           {toDoList.map((todo, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center border rounded flex-nowrap h-full mt-2 mb-2 bg-gray-100 hover:shadow hover:border-red-300 transform hover:scale-x-105"
-            >
-              <p className="w-5/6 px-6 py-2">{todo.text}</p>
+            //TODO: Try to get the svg icon within the div, add a slide feature if possible
+            //FIXME: Fix the toggling feature. Once clicked again, the line-through should be removed
 
-              {/* <IconButton
-                  color="secondary"
-                  size="small"
-                  onClick={() => handleDelete(todo)}
-                >
-                  <DeleteIcon />
-                </IconButton> */}
+            <div
+              onClick={() => completeTodo(index)}
+              className={todo.isCompleted ? 'line-through' : ''}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                stroke="currentColor"
+                className="h-full w-5 mx-auto  text-green-600 cursor-pointer transform hover:scale-125"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
 
               <div
-                onClick={() => handleDelete(todo)}
-                className="flex-1 h-full w-1/6 py-3 cursor-pointer bg-pink-900 hover:bg-red-400 rounded-r"
+                key={index}
+                className="flex justify-between items-center border rounded flex-nowrap h-full mt-2 mb-2 bg-gray-100 hover:shadow hover:border-red-300 transform hover:scale-x-105"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="h-full w-5 mx-auto"
+                <p className="w-5/6 px-6 py-2">{todo.text}</p>
+
+                <div
+                  onClick={() => handleDelete(todo)}
+                  className="flex-1 h-full w-1/6 py-3 cursor-pointer bg-pink-900 hover:bg-red-400 rounded-r"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="h-full w-5 mx-auto"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           ))}
@@ -115,7 +126,7 @@ function App() {
 
       <footer className="flex-shrink-0 h-16 mt-8 bg-pink-900 flex items-center justify-center shadow-footer">
         <p>
-          S'Moores &copy; {new Date().getFullYear()}
+          S'Moores AuLait &copy; {new Date().getFullYear()}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
